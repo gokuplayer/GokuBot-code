@@ -40,7 +40,23 @@ async def crackup(ctx, user:discord.User=None):
       await ctx.channel.send("Voice Crack Counter = " + str(voicecracks))
       print("fff")
     else:
-      
+      if os.path.exists(str(user)):
+        with open(str(user), "r") as f:
+          crackuser = int(f.read())
+        f.close()
+        crackuser += 1
+        with open(str(user), "w") as f:
+          f.write(str(crackuser))
+        f.close()
+        await ctx.channel.send(str(user) + " now has " + str(crackuser) + " cracks.")
+      else:
+        with open(str(user), "w") as f:
+          f.write("1")
+        f.close()
+        with open(str(user), "r") as f:
+          crackchange = str(f.read())
+        f.close()
+        await ctx.channel.send("Voicecracks are now " + crackchange)
 
 @bot.command()
 async def crackdown(ctx):
