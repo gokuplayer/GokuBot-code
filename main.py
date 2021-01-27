@@ -56,18 +56,31 @@ async def crackup(ctx, user:discord.User=None):
         with open(str(user), "r") as f:
           crackchange = str(f.read())
         f.close()
-        await ctx.channel.send("Voicecracks are now " + crackchange)
+        await ctx.channel.send("Voice cracks are now " + crackchange)
 
 @bot.command()
-async def crackdown(ctx):
+async def crackdown(ctx, user:discord.User=None):
   print("lll")
-  global voicecracks
-  voicecracks -= 1
-  with open("crackupbank.py", "w") as f:
-    f.write(str(voicecracks))
-  f.close()
-  await ctx.channel.send("Voice Crack Counter = " + str(voicecracks))
-  print("mmm")
+  if not user:
+    global voicecracks
+    voicecracks -= 1
+    with open("crackupbank.py", "w") as f:
+      f.write(str(voicecracks))
+    f.close()
+    await ctx.channel.send("Voice Crack Counter = " + str(voicecracks))
+    print("mmm")
+  else:
+    if os.path.exists(str(user)):
+      with open(str(user), "r") as f:
+        crackuser = int(f.read())
+      f.close()
+      crackuser -= 1
+      with open(str(user), "w") as f:
+        f.write(str(crackuser))
+      f.close()
+      await ctx.channel.send(str(user) + " now has " + str(crackuser) + " cracks.")
+    else:
+      await ctx.channel.send(str(user) + " does not have any voice cracks.")
 
 @bot.command()
 async def crackbank(ctx):
